@@ -1,23 +1,58 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { advancedSearchBooks } from '../openLibrary';
+// AdvancedSearchPage.js
+import React, { useState } from "react";
+import { advancedSearchBooks } from "../openLibrary";
 
-function AdvancedSearchPage() {
-  const [searchParams, setSearchParams] = useState({});
-  const history = useNavigate();
+const AdvancedSearchPage = () => {
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
-    advancedSearchBooks(searchParams).then((results) => {
-      // Handle search results
-    });
+  const handleSearchResults = (results) => {
+    setSearchResults(results || []);
+    setLoading(false);
+  };
+
+  const handleAdvancedSearch = async () => {
+    setLoading(true);
+    try {
+      // Utilisez les paramètres de recherche avancée en fonction de votre interface utilisateur
+      const params = {
+        q: query,
+        // Ajoutez d'autres paramètres en fonction de vos besoins
+      };
+
+      const data = await advancedSearchBooks(params);
+      handleSearchResults(data.docs);
+    } catch (error) {
+      // Gérer les erreurs
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div>
-      {/* Form for advanced search */}
-      <button onClick={handleSearch}>Search</button>
+      <h1>Advanced Search Page</h1>
+
+      <div>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button onClick={handleAdvancedSearch}>Search</button>
+      </div>
+
+      {loading && <p>Loading...</p>}
+
+      <ul>
+        {searchResults &&
+          searchResults.map((book) => (
+            <li key={book.key}>{book.title}</li>
+          ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default AdvancedSearchPage;

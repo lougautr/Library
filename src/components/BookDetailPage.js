@@ -1,41 +1,75 @@
-// src/components/BookDetailPage.js
+// BookDetailPage.js
 import React, { useEffect, useState } from "react";
-import { getBookDetails, getWikipediaInfo } from "../openLibrary";
+import { useParams } from "react-router-dom";
+import { getBookDetails, getAuthorDetails, getWikipediaInfo } from "../openLibrary";
 
-const BookDetailPage = ({ match }) => {
-  const [bookDetails, setBookDetails] = useState(null);
-  const [wikipediaInfo, setWikipediaInfo] = useState(null);
+const BookDetailsPage = () => {
+  const { id } = useParams();
+  const [bookDetails, setBookDetails] = useState({});
+  const [wikipediaInfo, setWikipediaInfo] = useState({});
+  const [authorDetails, setAuthorDetails] = useState({});
 
   useEffect(() => {
-    const fetchData = async () => {
-      const bookId = match.params.id;
+    const fetchBookDetails = async () => {
       try {
-        // Obtient les détails du livre depuis Open Library
-        const details = await getBookDetails(bookId);
+        const details = await getBookDetails(id);
         setBookDetails(details);
-
-        // Obtient les informations de Wikipedia basées sur le titre du livre
+        
         const wikipediaInfo = await getWikipediaInfo(details.title);
         setWikipediaInfo(wikipediaInfo);
+
+
+        if (details.authors && details.authors.length > 0) {          
+          const authorUrl = `${details.authors[0].author.key}`;
+          const authorInfo = await getAuthorDetails(authorUrl);
+          setAuthorDetails(authorInfo);
+        }
+
       } catch (error) {
+        // Handle errors
         console.error("Error fetching book details", error);
       }
     };
 
-    fetchData();
-  }, [match.params.id]);
-
-  if (!bookDetails) {
-    return <div>Loading...</div>;
-  }
+    fetchBookDetails();
+  }, [id]);
 
   return (
     <div>
+      <h1>Book Details</h1>
+      <img src={`https://covers.openlibrary.org/b/id/${bookDetails.covers?.[0] ?? "default"}-L.jpg`} alt="Book Cover" />
       <h2>{bookDetails.title}</h2>
-      <p>{wikipediaInfo?.description}</p>
-      {/* Ajoute le reste des informations du livre ici */}
+      <p>Author: {authorDetails.name}</p>
+      <p>First Publish Date: {bookDetails.first_publish_date}</p>
+      <p>Subject Places: {bookDetails.subject_places?.join(", ")}</p>
+      <p>Subject People: {bookDetails.subject_people?.join(", ")}</p>
+      {/* Add more details as needed */}
+
+
+      {wikipediaInfo.description && (
+        <div>
+          <h3>Wikipedia Description</h3>
+          <p>{wikipediaInfo.description}</p>
+          {/* Add more Wikipedia-related information as needed */}
+        </div>
+      )}
+
+      {bookDetails.links && bookDetails.links.length > 0 && (
+        <div>
+          <h3>Additional Links</h3>
+          <ul>
+            {bookDetails.links.map(link => (
+              <li key={link.url}>
+                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  {link.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
 
-export default BookDetailPage;
+export default BookDetailsPage;

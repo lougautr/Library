@@ -26,32 +26,43 @@ export const getBookDetails = async (identifier) => {
 };
 
 
-// openLibrary.js
 export const getWikipediaInfo = async (title) => {
-  const apiUrl = `https://fr.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=${encodeURIComponent(title)}&exintro=true&callback=?`;
+  try {
+    // Construisez l'URL de l'API MediaWiki pour récupérer les informations de Wikipedia
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro=true&titles=${encodeURIComponent(title)}`;
 
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = apiUrl;
-    script.async = true;
+    // Utilisez fetch pour récupérer les informations de Wikipedia depuis l'API MediaWiki
+    const response = await fetch(apiUrl);
 
-    // Function to be called when JSONP request is successful
-    window.jsonpCallback = (data) => {
-      delete window.jsonpCallback;
-      document.body.removeChild(script);
-      resolve(data);
-    };
+    // Si la réponse n'est pas réussie (statut différent de 200), lancez une erreur
+    if (!response.ok) {
+      throw new Error(`Erreur lors de la récupération des informations Wikipedia. Statut: ${response.status}`);
+    }
 
-    // Function to be called on error
-    script.onerror = (error) => {
-      delete window.jsonpCallback;
-      document.body.removeChild(script);
-      reject(error);
-    };
+    // Récupérez les données JSON de la réponse
+    const data = await response.json();
 
-    document.body.appendChild(script);
-  });
+    // Obtenez le premier objet de la propriété "pages"
+    const pageId = Object.keys(data.query.pages)[0];
+    const pageInfo = data.query.pages[pageId];
+
+    // Vérifiez si un extrait est disponible
+    if (pageInfo.extract) {
+      return {
+        extract: pageInfo.extract,
+      };
+    } else {
+      throw new Error('Aucun extrait trouvé dans la réponse de Wikipedia');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations Wikipedia', error);
+    throw error;
+  }
 };
+
+
+
+
 
 
 export const advancedSearchBooks = async (params) => {

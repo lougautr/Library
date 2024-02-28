@@ -1,4 +1,3 @@
-// BookDetailPage.js
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getBookDetails, getAuthorDetails, getWikipediaInfo } from "../openLibrary";
@@ -6,25 +5,31 @@ import { getBookDetails, getAuthorDetails, getWikipediaInfo } from "../openLibra
 const BookDetailsPage = () => {
   const { id } = useParams();
   const [bookDetails, setBookDetails] = useState({});
-  const [wikipediaInfo, setWikipediaInfo] = useState({});
   const [authorDetails, setAuthorDetails] = useState({});
+  const [wikipediaInfo, setWikipediaInfo] = useState({});
+
+  const cleanHTMLTags = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+    return doc.body.textContent || "";
+  };
 
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
         const details = await getBookDetails(id);
         setBookDetails(details);
-        
-        const wikipediaInfo = await getWikipediaInfo(details.title);
-        setWikipediaInfo(wikipediaInfo);
 
-
-        if (details.authors && details.authors.length > 0) {          
+        if (details.authors && details.authors.length > 0) {
           const authorUrl = `${details.authors[0].author.key}`;
           const authorInfo = await getAuthorDetails(authorUrl);
           setAuthorDetails(authorInfo);
         }
 
+        console.log("test4");
+        // Fetch Wikipedia Info
+        const wikipediaInfo = await getWikipediaInfo(details.title);
+        console.log("test5");
+        setWikipediaInfo(wikipediaInfo);
       } catch (error) {
         // Handle errors
         console.error("Error fetching book details", error);
@@ -43,14 +48,11 @@ const BookDetailsPage = () => {
       <p>First Publish Date: {bookDetails.first_publish_date}</p>
       <p>Subject Places: {bookDetails.subject_places?.join(", ")}</p>
       <p>Subject People: {bookDetails.subject_people?.join(", ")}</p>
-      {/* Add more details as needed */}
 
-
-      {wikipediaInfo.description && (
+      {wikipediaInfo.extract && (
         <div>
-          <h3>Wikipedia Description</h3>
-          <p>{wikipediaInfo.description}</p>
-          {/* Add more Wikipedia-related information as needed */}
+          <h3>Wikipedia Extract</h3>
+          <p>{cleanHTMLTags(wikipediaInfo.extract)}</p>
         </div>
       )}
 

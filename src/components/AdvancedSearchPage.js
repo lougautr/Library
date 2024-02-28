@@ -1,56 +1,74 @@
-// AdvancedSearchPage.js
 import React, { useState } from "react";
-import { advancedSearchBooks } from "../openLibrary";
+import SearchComponent from "./SearchComponent";
+import { Link } from "react-router-dom";
+import { searchBooks, advancedSearchBooks } from "../openLibrary";
 
 const AdvancedSearchPage = () => {
   const [query, setQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const handleSearchResults = (results) => {
-    setSearchResults(results || []);
-    setLoading(false);
-  };
+  const [advancedSearchResults, setAdvancedSearchResults] = useState([]);
+  const [basicSearchResults, setBasicSearchResults] = useState([]);
+  const [advancedSearchloading, setAdvancedSearchLoading] = useState(false);
+  const [basicSearchloading, setBasicSearchLoading] = useState(false);
 
   const handleAdvancedSearch = async () => {
-    setLoading(true);
+    setAdvancedSearchLoading(true);
     try {
-      // Utilisez les paramètres de recherche avancée en fonction de votre interface utilisateur
       const params = {
         q: query,
-        // Ajoutez d'autres paramètres en fonction de vos besoins
       };
 
       const data = await advancedSearchBooks(params);
-      handleSearchResults(data.docs);
+      setAdvancedSearchResults(data.docs || []);
     } catch (error) {
-      // Gérer les erreurs
+      console.error("Error during advanced search", error);
     } finally {
-      setLoading(false);
+      setAdvancedSearchLoading(false);
+    }
+  };
+
+  const handleBasicSearch = async (basicQuery) => {
+    setBasicSearchLoading(true);
+    try {
+      const data = await searchBooks(basicQuery);
+      setBasicSearchResults(data.docs || []);
+    } catch (error) {
+      console.error("Error during basic search", error);
+    } finally {
+      setBasicSearchLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="page">
       <h1>Advanced Search Page</h1>
 
       <div>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button onClick={handleAdvancedSearch}>Search</button>
+        <h2>Advanced search for some books</h2>
+        <SearchComponent onSearch={handleAdvancedSearch} />
+        {advancedSearchloading && <p>Loading...</p>}
+
+        <ul>
+          {advancedSearchResults.map((book) => (
+            <li key={book.key}>
+              <Link to={`/book/${book.key.split("/works/")[1]}`}>{book.title}</Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {loading && <p>Loading...</p>}
+      <div>
+        <h2>Basic search for some books</h2>
+        <SearchComponent onSearch={handleBasicSearch} />
+        {basicSearchloading && <p>Loading...</p>}
 
-      <ul>
-        {searchResults &&
-          searchResults.map((book) => (
-            <li key={book.key}>{book.title}</li>
+        <ul>
+          {basicSearchResults.map((book) => (
+            <li key={book.key}>
+              <Link to={`/book/${book.key.split("/works/")[1]}`}>{book.title}</Link>
+            </li>
           ))}
-      </ul>
+        </ul>
+      </div>
     </div>
   );
 };

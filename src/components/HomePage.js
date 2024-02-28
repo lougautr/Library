@@ -42,7 +42,7 @@ const HomePage = () => {
   }, []); // Appeler la fonction une fois après le rendu initial
 
   return (
-    <div class="home-page">
+    <div className="page">
       <h1>Home Page</h1>
 
       <h2>Search for some books</h2>
@@ -59,7 +59,7 @@ const HomePage = () => {
 
       <h2>Recent changes (this month)</h2>
       {recentChanges.length > 0 ? (
-        <ul class="recent-changes">
+        <ul className="recent-changes">
           {recentChanges && recentChanges.map((change) => (
             // Vérifier si change.comment n'est pas vide
             change.comment && <li key={change.timestamp}>{change.comment}</li>

@@ -25,10 +25,8 @@ const BookDetailsPage = () => {
           setAuthorDetails(authorInfo);
         }
 
-        console.log("test4");
         // Fetch Wikipedia Info
         const wikipediaInfo = await getWikipediaInfo(details.title);
-        console.log("test5");
         setWikipediaInfo(wikipediaInfo);
       } catch (error) {
         // Handle errors
@@ -40,19 +38,41 @@ const BookDetailsPage = () => {
   }, [id]);
 
   return (
-    <div>
+    <div className="page">
       <h1>Book Details</h1>
-      <img src={`https://covers.openlibrary.org/b/id/${bookDetails.covers?.[0] ?? "default"}-L.jpg`} alt="Book Cover" />
+      {bookDetails.covers && (
+        <img src={`https://covers.openlibrary.org/b/id/${bookDetails.covers[0]}-L.jpg`} alt="Book Cover" />
+      )}
       <h2>{bookDetails.title}</h2>
-      <p>Author: {authorDetails.name}</p>
-      <p>First Publish Date: {bookDetails.first_publish_date}</p>
-      <p>Subject Places: {bookDetails.subject_places?.join(", ")}</p>
-      <p>Subject People: {bookDetails.subject_people?.join(", ")}</p>
+      {authorDetails.name && (
+        <p>Author: {authorDetails.name}</p>
+      )}
+      {bookDetails.first_publish_date && (
+        <p>First Publish Date: {bookDetails.first_publish_date}</p>
+      )}
+      {bookDetails.subject_places && bookDetails.subject_places.length > 0 && (
+        <p>Subject Places: {bookDetails.subject_places.join(", ")}</p>
+      )}
+      {bookDetails.subject_people && bookDetails.subject_people.length > 0 && (
+        <p>Subject People: {bookDetails.subject_people.join(", ")}</p>
+      )}
 
       {wikipediaInfo.extract && (
         <div>
           <h3>Wikipedia Extract</h3>
-          <p>{cleanHTMLTags(wikipediaInfo.extract)}</p>
+          <p>
+            <strong>Wikipedia Intro:</strong>{" "}
+            {cleanHTMLTags(wikipediaInfo.extract)}
+          </p>
+          <p>
+            <strong>Wikipedia Link:</strong>{" "}
+            <a href={wikipediaInfo.wikipediaLink} target="_blank" rel="noopener noreferrer">
+              {wikipediaInfo.wikipediaLink}
+            </a>
+          </p>
+          {wikipediaInfo.wikipediaCover && (
+            <img src={wikipediaInfo.wikipediaCover} alt="Wikipedia Cover" />
+          )}
         </div>
       )}
 

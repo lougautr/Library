@@ -3,9 +3,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import HomePage from './components/HomePage';
-import SearchResultPage from './components/SearchResultPage';
 import AdvancedSearchPage from './components/AdvancedSearchPage';
 import BookDetailPage from './components/BookDetailPage';
+import AboutPage from './components/AboutPage';
 import './App.css';
 
 function App() {
@@ -13,24 +13,24 @@ function App() {
     <Router>
       <div>
         <nav>
-          <ul class="navbar">
+          <ul className="navbar">
             <li>
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/search">Search</Link>
+              <Link to="/advanced-search">Advanced Search</Link>
             </li>
             <li>
-              <Link to="/advanced-search">Advanced Search</Link>
+              <Link to="/about">About</Link>
             </li>
           </ul>
         </nav>
 
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/search" element={<SearchResultPage />} />
           <Route path="/advanced-search" element={<AdvancedSearchPage />} />
           <Route path="/book/:id" element={<BookDetailPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </div>
     </Router>

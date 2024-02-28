@@ -25,31 +25,33 @@ export const getBookDetails = async (identifier) => {
   }
 };
 
-
 export const getWikipediaInfo = async (title) => {
   try {
-    // Construisez l'URL de l'API MediaWiki pour récupérer les informations de Wikipedia
-    const apiUrl = `/api/w/api.php?action=query&format=json&prop=extracts&exintro=true&titles=${encodeURIComponent(title)}&explaintext=true`;
+    const apiUrl = `/api/w/api.php?action=query&format=json&prop=extracts|pageimages&exintro=true&titles=${encodeURIComponent(title)}&explaintext=true&pithumbsize=500`;
 
-    // Utilisez fetch pour récupérer les informations de Wikipedia depuis le proxy
     const response = await fetch(apiUrl);
 
-    // Si la réponse n'est pas réussie (statut différent de 200), lancez une erreur
     if (!response.ok) {
       throw new Error(`Erreur lors de la récupération des informations Wikipedia. Statut: ${response.status}`);
     }
 
-    // Récupérez les données JSON de la réponse
     const data = await response.json();
 
-    // Obtenez le premier objet de la propriété "pages"
     const pageId = Object.keys(data.query.pages)[0];
     const pageInfo = data.query.pages[pageId];
 
-    // Vérifiez si un extrait est disponible
     if (pageInfo.extract) {
+      // Obtenez le lien et l'intro de Wikipedia
+      const wikipediaLink = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+      const wikipediaExtract = pageInfo.extract;
+
+      // Obtenez l'image de Wikimedia Commons
+      const wikipediaCover = pageInfo.thumbnail ? pageInfo.thumbnail.source : null;
+
       return {
-        extract: pageInfo.extract,
+        extract: wikipediaExtract,
+        wikipediaLink,
+        wikipediaCover,
       };
     } else {
       throw new Error('Aucun extrait trouvé dans la réponse de Wikipedia');
@@ -59,12 +61,6 @@ export const getWikipediaInfo = async (title) => {
     throw error;
   }
 };
-
-
-
-
-
-
 
 export const advancedSearchBooks = async (params) => {
   try {

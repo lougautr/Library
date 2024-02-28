@@ -4,17 +4,18 @@ import { Link } from "react-router-dom";
 import { searchBooks, advancedSearchBooks } from "../openLibrary";
 
 const AdvancedSearchPage = () => {
-  const [query, setQuery] = useState("");
+  const [advancedQuery, setAdvancedQuery] = useState("");
   const [advancedSearchResults, setAdvancedSearchResults] = useState([]);
+  const [basicQuery, setBasicQuery] = useState("");
   const [basicSearchResults, setBasicSearchResults] = useState([]);
   const [advancedSearchloading, setAdvancedSearchLoading] = useState(false);
-  const [basicSearchloading, setBasicSearchLoading] = useState(false);
+  const [basicSearchLoading, setBasicSearchLoading] = useState(false);
 
   const handleAdvancedSearch = async () => {
     setAdvancedSearchLoading(true);
     try {
       const params = {
-        q: query,
+        q: advancedQuery,
       };
 
       const data = await advancedSearchBooks(params);
@@ -26,7 +27,7 @@ const AdvancedSearchPage = () => {
     }
   };
 
-  const handleBasicSearch = async (basicQuery) => {
+  const handleBasicSearch = async () => {
     setBasicSearchLoading(true);
     try {
       const data = await searchBooks(basicQuery);
@@ -38,13 +39,21 @@ const AdvancedSearchPage = () => {
     }
   };
 
+  const handleAdvancedQueryChange = (newQuery) => {
+    setAdvancedQuery(newQuery);
+  };
+
+  const handleBasicQueryChange = (newQuery) => {
+    setBasicQuery(newQuery);
+  };
+
   return (
     <div className="page">
       <h1>Advanced Search Page</h1>
 
       <div>
         <h2>Advanced search for some books</h2>
-        <SearchComponent onSearch={handleAdvancedSearch} />
+        <SearchComponent onSearch={handleAdvancedSearch} onQueryChange={handleAdvancedQueryChange} />
         {advancedSearchloading && <p>Loading...</p>}
 
         <ul>
@@ -58,8 +67,8 @@ const AdvancedSearchPage = () => {
 
       <div>
         <h2>Basic search for some books</h2>
-        <SearchComponent onSearch={handleBasicSearch} />
-        {basicSearchloading && <p>Loading...</p>}
+        <SearchComponent onSearch={handleBasicSearch} onQueryChange={handleBasicQueryChange} />
+        {basicSearchLoading && <p>Loading...</p>}
 
         <ul>
           {basicSearchResults.map((book) => (

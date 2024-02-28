@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SearchComponent from "./SearchComponent";
-import { searchBooks, getRecentChanges } from "../openLibrary";
+import { searchBooks } from "../openLibrary";
 import { Link } from "react-router-dom";
 
 const AboutPage = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [basicQuery, setBasicQuery] = useState("");
+  const [basicSearchResults, setBasicSearchResults] = useState([]);
+  const [basicSearchLoading, setBasicSearchLoading] = useState(false);
 
-  const handleSearchResults = (results) => {
-    setSearchResults(results || []);
-    setLoading(false);
+  const handleBasicSearch = async () => {
+    setBasicSearchLoading(true);
+    try {
+      const data = await searchBooks(basicQuery);
+      setBasicSearchResults(data.docs || []);
+    } catch (error) {
+      console.error("Error during basic search", error);
+    } finally {
+      setBasicSearchLoading(false);
+    }
   };
 
-  const handleSearch = async (query) => {
-    setLoading(true);
-    try {
-      const data = await searchBooks(query);
-      handleSearchResults(data.docs);
-    } catch (error) {
-      // Gérer les erreurs
-    } finally {
-      setLoading(false);
-    }
+  const handleBasicQueryChange = (newQuery) => {
+    setBasicQuery(newQuery);
   };
 
   return (
@@ -38,15 +38,15 @@ const AboutPage = () => {
         </ul>
 
         <h2>Search for some books</h2>
-        <SearchComponent onSearch={handleSearch} />
-        {loading && <p>Loading...</p>}
+        <SearchComponent onSearch={handleBasicSearch} onQueryChange={handleBasicQueryChange} />
+        {basicSearchLoading && <p>Loading...</p>}
 
         <ul>
-            {searchResults && searchResults.map((book) => (
+          {basicSearchResults.map((book) => (
             <li key={book.key}>
-                <Link to={`/book/${book.key.split("/works/")[1]}`}>{book.title}</Link>
+              <Link to={`/book/${book.key.split("/works/")[1]}`}>{book.title}</Link>
             </li>
-            ))}
+          ))}
         </ul>
     </div>
   );

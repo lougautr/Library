@@ -64,9 +64,16 @@ export const getWikipediaInfo = async (title) => {
 
 export const advancedSearchBooks = async (params) => {
   try {
-    // Convertit les paramètres en une chaîne de requête pour l'URL
+    // Convertir les paramètres en une chaîne de requête pour l'URL
     const queryString = Object.keys(params)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+      .map((key) => {
+        // Ignorer les paramètres vides
+        if (params[key] !== "") {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`;
+        }
+        return null;
+      })
+      .filter((param) => param !== null)
       .join("&");
 
     const response = await fetch(`${OPEN_LIBRARY_API_BASE}?${queryString}`);

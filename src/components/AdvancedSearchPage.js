@@ -15,9 +15,12 @@ const AdvancedSearchPage = () => {
     setAdvancedSearchLoading(true);
     try {
       const params = {
-        q: advancedQuery,
+        title: advancedQuery,  // Utiliser le titre comme critère par défaut
+        author: "",           // Ajouter des paramètres supplémentaires
+        date: "",
+        tags: "",
       };
-
+  
       const data = await advancedSearchBooks(params);
       setAdvancedSearchResults(data.docs || []);
     } catch (error) {

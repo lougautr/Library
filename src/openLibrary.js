@@ -29,9 +29,9 @@ export const getBookDetails = async (identifier) => {
 export const getWikipediaInfo = async (title) => {
   try {
     // Construisez l'URL de l'API MediaWiki pour récupérer les informations de Wikipedia
-    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro=true&titles=${encodeURIComponent(title)}`;
+    const apiUrl = `/api/w/api.php?action=query&format=json&prop=extracts&exintro=true&titles=${encodeURIComponent(title)}&explaintext=true`;
 
-    // Utilisez fetch pour récupérer les informations de Wikipedia depuis l'API MediaWiki
+    // Utilisez fetch pour récupérer les informations de Wikipedia depuis le proxy
     const response = await fetch(apiUrl);
 
     // Si la réponse n'est pas réussie (statut différent de 200), lancez une erreur
@@ -59,6 +59,7 @@ export const getWikipediaInfo = async (title) => {
     throw error;
   }
 };
+
 
 
 

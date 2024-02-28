@@ -1,4 +1,3 @@
-// src/openLibrary.js
 const OPEN_LIBRARY_API_BASE = "https://openlibrary.org/search.json";
 const RECENT_CHANGES_API_BASE = "http://openlibrary.org/recentchanges";
 
@@ -13,7 +12,6 @@ export const searchBooks = async (query) => {
   }
 };
 
-// openLibrary.js
 export const getBookDetails = async (identifier) => {
   try {
     const response = await fetch(`https://openlibrary.org/works/${identifier}.json`);

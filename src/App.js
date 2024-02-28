@@ -6,6 +6,8 @@ import HomePage from './components/HomePage';
 import AdvancedSearchPage from './components/AdvancedSearchPage';
 import BookDetailPage from './components/BookDetailPage';
 import AboutPage from './components/AboutPage';
+import NotFound from './components/NotFound';
+
 import './App.css';
 
 function App() {
@@ -18,7 +20,7 @@ function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/advanced-search">Advanced Search</Link>
+              <Link to="/search">Search</Link>
             </li>
             <li>
               <Link to="/about">About</Link>
@@ -28,9 +30,11 @@ function App() {
 
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/advanced-search" element={<AdvancedSearchPage />} />
+          <Route path="/search" element={<AdvancedSearchPage />} />
           <Route path="/book/:id" element={<BookDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/book/*" element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>

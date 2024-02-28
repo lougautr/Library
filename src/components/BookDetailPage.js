@@ -7,6 +7,7 @@ const BookDetailsPage = () => {
   const [bookDetails, setBookDetails] = useState({});
   const [authorDetails, setAuthorDetails] = useState({});
   const [wikipediaInfo, setWikipediaInfo] = useState({});
+  const [error, setError] = useState(null);
 
   const cleanHTMLTags = (htmlString) => {
     const doc = new DOMParser().parseFromString(htmlString, 'text/html');
@@ -17,6 +18,12 @@ const BookDetailsPage = () => {
     const fetchBookDetails = async () => {
       try {
         const details = await getBookDetails(id);
+
+        if (!details.title) {
+          setError("Book not found. Please enter a valid ID.");
+          return;
+        }
+
         setBookDetails(details);
 
         if (details.authors && details.authors.length > 0) {
@@ -30,6 +37,7 @@ const BookDetailsPage = () => {
         setWikipediaInfo(wikipediaInfo);
       } catch (error) {
         // Handle errors
+        setError("Error fetching book details. Please try again later.");
         console.error("Error fetching book details", error);
       }
     };
@@ -37,13 +45,24 @@ const BookDetailsPage = () => {
     fetchBookDetails();
   }, [id]);
 
+  if (error) {
+    return (
+      <div className="page">
+        <h1>Error</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="page">
       <h1>Book Details</h1>
+
       {bookDetails.covers && (
         <img src={`https://covers.openlibrary.org/b/id/${bookDetails.covers[0]}-L.jpg`} alt="Book Cover" />
       )}
       <h2>{bookDetails.title}</h2>
+
       {authorDetails.name && (
         <p>Author: {authorDetails.name}</p>
       )}

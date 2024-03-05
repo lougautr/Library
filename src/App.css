@@ -94,3 +94,32 @@ nav {
 .page {
   padding: 0% 2%;
 }
+
+.basic-results {
+  list-style-type: none;
+  padding: 0;
+}
+
+.basic-results li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.basic-results li:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.basic-results li a {
+  display: block;
+  padding: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.basic-results li a:hover {
+  text-decoration: underline;
+}

@@ -1,14 +1,12 @@
-// App.js
-
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import HomePage from './components/HomePage';
-import AdvancedSearchPage from './components/AdvancedSearchPage';
-import BookDetailPage from './components/BookDetailPage';
-import AboutPage from './components/AboutPage';
 import NotFound from './components/NotFound';
-
 import './App.css';
+
+const HomePage = lazy(() => import('./components/HomePage'));
+const AdvancedSearchPage = lazy(() => import('./components/AdvancedSearchPage'));
+const BookDetailPage = lazy(() => import('./components/BookDetailPage'));
+const AboutPage = lazy(() => import('./components/AboutPage'));
 
 function App() {
   return (
@@ -28,14 +26,16 @@ function App() {
           </ul>
         </nav>
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/search" element={<AdvancedSearchPage />} />
-          <Route path="/book/:id" element={<BookDetailPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/book/*" element={<NotFound />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<AdvancedSearchPage />} />
+            <Route path="/book/:id" element={<BookDetailPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/book/*" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </div>
     </Router>
   );

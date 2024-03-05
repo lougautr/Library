@@ -6,7 +6,7 @@ describe('searchBooks', () => {
   let numFoundAdvanced = null;
 
   it('should fetch books from Open Library API', function(done) {
-    this.timeout(5000); // Définit le délai d'attente global pour ce test
+    this.timeout(8000); // Définit le délai d'attente global pour ce test
 
     searchBooks('Harry Potter').then((books) => {
       assert.ok(books);

@@ -44,6 +44,7 @@
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
+    "@babel/register": "^7.23.7",
     "babel-jest": "^29.7.0",
     "jest": "^27.5.1",
     "mocha": "^10.3.0"

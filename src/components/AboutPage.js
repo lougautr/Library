@@ -44,7 +44,7 @@ const AboutPage = () => {
         <SearchComponent onSearch={handleBasicSearch} onQueryChange={handleBasicQueryChange} />
         {basicSearchLoading && <p>Loading...</p>}
 
-        <ul>
+        <ul className="results">
           {basicSearchResults.map((book) => (
             <li key={book.key}>
               <Link to={`/book/${book.key.split("/works/")[1]}`}>{book.title}</Link>

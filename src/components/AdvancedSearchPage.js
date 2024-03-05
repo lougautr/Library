@@ -15,8 +15,8 @@ const AdvancedSearchPage = () => {
     setAdvancedSearchLoading(true);
     try {
       const params = {
-        title: advancedQuery,  // Utiliser le titre comme critère par défaut
-        author: "",           // Ajouter des paramètres supplémentaires
+        title: advancedQuery,
+        author: "",
         date: "",
         tags: "",
       };

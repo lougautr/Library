@@ -33,13 +33,13 @@ const HomePage = () => {
       const recentChangesData = await getRecentChanges(year, month);
       setRecentChanges(recentChangesData || []);
     } catch (error) {
-      // Gérer les erreurs
+      console.error("Error retrieving recent changes", error);
     }
   };
 
   useEffect(() => {
     fetchRecentChanges();
-  }, []); // Appeler la fonction une fois après le rendu initial
+  }, []);
 
   return (
     <div className="page">

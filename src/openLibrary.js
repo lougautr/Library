@@ -38,11 +38,9 @@ export const getWikipediaInfo = async (title) => {
     const pageInfo = data.query.pages[pageId];
 
     if (pageInfo.extract) {
-      // Obtenez le lien et l'intro de Wikipedia
       const wikipediaLink = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
       const wikipediaExtract = pageInfo.extract;
 
-      // Obtenez l'image de Wikimedia Commons
       const wikipediaCover = pageInfo.thumbnail ? pageInfo.thumbnail.source : null;
 
       return {
@@ -61,10 +59,8 @@ export const getWikipediaInfo = async (title) => {
 
 export const advancedSearchBooks = async (params) => {
   try {
-    // Convertir les paramètres en une chaîne de requête pour l'URL
     const queryString = Object.keys(params)
       .map((key) => {
-        // Ignorer les paramètres vides
         if (params[key] !== "") {
           return `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`;
         }

@@ -6,7 +6,7 @@ describe('searchBooks', () => {
   let numFoundAdvanced = null;
 
   it('should fetch books from Open Library API', function(done) {
-    this.timeout(8000); // Définit le délai d'attente global pour ce test
+    this.timeout(10000); // Définit le délai d'attente global pour ce test
 
     searchBooks('Harry Potter').then((books) => {
       assert.ok(books);
@@ -19,7 +19,7 @@ describe('searchBooks', () => {
   });
 
   it('should fetch books more precise from Open Library API', function(done) {
-    this.timeout(8000); // Définit le délai d'attente global pour ce test
+    this.timeout(10000); // Définit le délai d'attente global pour ce test
     const params = {
       title: 'Harry Potter',  // Utiliser le titre comme critère par défaut
       author: "",           // Ajouter des paramètres supplémentaires

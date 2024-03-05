@@ -37,6 +37,9 @@ const AboutPage = () => {
             <li>Lou-Anne Gautherie</li>
         </ul>
 
+        <h2>Plus d'informations</h2>
+        <a href="https://youtu.be/dQw4w9WgXcQ?si=vUswz7MWPo1wrr-B">Cliquez ici pour découvrir le code promo de la boutique de snacks du BDE SUPINFO CAEN</a>
+
         <h2>Search for some books</h2>
         <SearchComponent onSearch={handleBasicSearch} onQueryChange={handleBasicQueryChange} />
         {basicSearchLoading && <p>Loading...</p>}

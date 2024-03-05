@@ -32,11 +32,9 @@ const BookDetailsPage = () => {
           setAuthorDetails(authorInfo);
         }
 
-        // Fetch Wikipedia Info
         const wikipediaInfo = await getWikipediaInfo(details.title);
         setWikipediaInfo(wikipediaInfo);
       } catch (error) {
-        // Handle errors
         setError("Error fetching book details. Please try again later.");
         console.error("Error fetching book details", error);
       }

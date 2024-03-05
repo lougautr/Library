@@ -26,7 +26,6 @@ export const getBookDetails = async (identifier) => {
 export const getWikipediaInfo = async (title) => {
   try {
     const apiUrl = `/api/w/api.php?action=query&format=json&prop=extracts|pageimages&exintro=true&titles=${encodeURIComponent(title)}&explaintext=true&pithumbsize=500`;
-
     const response = await fetch(apiUrl);
 
     if (!response.ok) {

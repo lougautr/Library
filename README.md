@@ -1,3 +1,5 @@
+## Front react app using openLibrary api to display and search some books 
+
 ### `npm install`
 
 Pour installer tous les packages nécessaires
